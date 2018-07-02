@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 
-  s.name            = 'logstash-codec-protobuf'
+  s.name            = 'logstash-codec-zylog'
   s.version         = '1.1.0'
   s.licenses        = ['Apache License (2.0)']
   s.summary         = "Reads protobuf messages and converts to Logstash Events"
