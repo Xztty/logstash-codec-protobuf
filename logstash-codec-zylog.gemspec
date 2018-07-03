@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name            = 'logstash-codec-zylog'
-  s.version         = '1.0.5'
+  s.version         = '1.0.6'
   s.licenses        = ['Apache-2.0']
   s.summary         = "This codec may be used to decode (via inputs) and encode (via outputs) protobuf messages"
   s.description     = "This gem is a logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/plugin install gemname. This gem is not a stand-alone program"
