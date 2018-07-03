@@ -42,7 +42,7 @@ require 'protocol_buffers' # https://github.com/codekitchen/ruby-protocol-buffer
 # Specifically for the kafka input: please set the deserializer classes as shown above.
 
 class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
-  config_name 'protobuf'
+  config_name 'zylog'
 
   # Name of the class to decode.
   # If your protobuf 2 definition contains modules, prepend them to the class name with double colons like so:
