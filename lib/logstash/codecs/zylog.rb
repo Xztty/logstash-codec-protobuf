@@ -76,6 +76,27 @@ class LogStash::Codecs::Zylog < LogStash::Codecs::Base
 
   def decode(data)
     begin
+      @logger.warn("data class type: #{data.class}.")
+      @logger.warn("receive data length: #{data.length}.")
+      if data.length >= 5
+        payload = data.bytes.to_a
+        @logger.warn("receive data byte 1th: #{payload.slice!(0)}.")
+        @logger.warn("receive data byte 2th: #{payload.slice!(1)}.")
+        @logger.warn("receive data byte 3th: #{payload.slice!(2)}.")
+        @logger.warn("receive data byte 4th: #{payload.slice!(3)}.")
+        @logger.warn("receive data byte 5th: #{payload.slice!(4)}.")
+        total_packet_length = payload.slice!(1) + payload.slice!(2) << 8 + payload.slice!(3) << 16 + payload.slice!(4) << 24
+        @logger.warn("total packet length: #{total_packet_length}.")
+        if data.length >= total_packet_length
+          data = data.slice(5, total_packet_length - 2)
+          @logger.warn("after extract receive data length: #{data.length}.")
+        else
+          raise(StandardError, "packet to small, length: #{data.length}.")
+        end
+      else
+        raise(StandardError, "packet to small, length: #{data.length}.")
+      end
+
       decoded = @obj.parse(data.to_s)
       yield LogStash::Event.new(decoded.to_hash) if block_given?
     rescue => e
