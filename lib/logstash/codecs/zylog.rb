@@ -21,8 +21,8 @@ require 'protocol_buffers' # https://github.com/codekitchen/ruby-protocol-buffer
 # }
 #
 
-class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
-  config_name 'protobuf'
+class LogStash::Codecs::Zylog < LogStash::Codecs::Base
+  config_name 'zylog'
 
   # Name of the class to decode.
   # If your protobuf definition contains modules, prepend them to the class name with double colons like so:
@@ -70,7 +70,7 @@ class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
     @pb_metainfo = {}
     include_path.each { |path| require_pb_path(path) }
     @obj = create_object_from_name(class_name)
-    @logger.debug("Protobuf files successfully loaded.")
+    @logger.debug("Zylog files successfully loaded.")
   end
 
 
@@ -143,7 +143,7 @@ class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
   end
 
    
-  def remove_atchar(key) # necessary for @timestamp fields and the likes. Protobuf definition doesn't handle @ in field names well.
+  def remove_atchar(key) # necessary for @timestamp fields and the likes. Zylog definition doesn't handle @ in field names well.
     key.dup.gsub(/@/,'')
   end
 
@@ -215,4 +215,4 @@ class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
   end
 
 
-end # class LogStash::Codecs::Protobuf
+end # class LogStash::Codecs::Zylog

@@ -1,18 +1,18 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
-require "logstash/codecs/protobuf"
+require "logstash/codecs/zylog"
 require "logstash/event"
 require 'protocol_buffers' # https://github.com/codekitchen/ruby-protocol-buffers
 require "insist"
 
-describe LogStash::Codecs::Protobuf do
+describe LogStash::Codecs::Zylog do
 
 
   context "#decode" do
 
 
     #### Test case 1: Decode simple protobuf bytes for unicorn ####################################################################################################################
-    let(:plugin_unicorn) { LogStash::Codecs::Protobuf.new("class_name" => "Animal::Unicorn", "include_path" => ['spec/helpers/unicorn.pb.rb'])  }
+    let(:plugin_unicorn) { LogStash::Codecs::zylog.new("class_name" => "Animal::Unicorn", "include_path" => ['spec/helpers/unicorn.pb.rb'])  }
     before do
         plugin_unicorn.register      
     end
@@ -37,7 +37,7 @@ describe LogStash::Codecs::Protobuf do
 
   
  
-    let(:plugin_human) { LogStash::Codecs::Protobuf.new("class_name" => "Animal::Human", "include_path" => ['spec/helpers/human.pb.rb'])  }
+    let(:plugin_human) { LogStash::Codecs::Zylog.new("class_name" => "Animal::Human", "include_path" => ['spec/helpers/human.pb.rb'])  }
     before do
         plugin_human.register      
     end
@@ -79,7 +79,7 @@ describe LogStash::Codecs::Protobuf do
 
   
  
-    let(:plugin_col) { LogStash::Codecs::Protobuf.new("class_name" => "ColourProtoTest", "include_path" => ['spec/helpers/ColourTestcase.pb.rb'])  }
+    let(:plugin_col) { LogStash::Codecs::Zylog.new("class_name" => "ColourProtoTest", "include_path" => ['spec/helpers/ColourTestcase.pb.rb'])  }
     before do
         plugin_col.register      
     end
@@ -108,7 +108,7 @@ describe LogStash::Codecs::Protobuf do
 
   context "#encode" do
     subject do
-      next LogStash::Codecs::Protobuf.new("class_name" => "Animal::UnicornEvent", "include_path" => ['spec/helpers/unicorn_event.pb.rb']) 
+      next LogStash::Codecs::Zylog.new("class_name" => "Animal::UnicornEvent", "include_path" => ['spec/helpers/unicorn_event.pb.rb'])
     end
 
     event = LogStash::Event.new("colour" => "pink", "horn_length" => 12, "last_seen" => 1410081999, "has_wings" => true)    
@@ -136,7 +136,7 @@ describe LogStash::Codecs::Protobuf do
   
   context "#encode2" do
     subject do
-      next LogStash::Codecs::Protobuf.new("class_name" => "Animal::Human", "include_path" => ['spec/helpers/human.pb.rb']) 
+      next LogStash::Codecs::Zylog.new("class_name" => "Animal::Human", "include_path" => ['spec/helpers/human.pb.rb'])
     end
 
     event = LogStash::Event.new("first_name" => "Jimmy", "middle_names" => ["Bob", "James"], "last_name" => "Doe" \
@@ -176,7 +176,7 @@ describe LogStash::Codecs::Protobuf do
  
   context "#encode3" do
     subject do
-      next LogStash::Codecs::Protobuf.new("class_name" => "ColourProtoTest", "include_path" => ['spec/helpers/ColourTestcase.pb.rb'])
+      next LogStash::Codecs::Zylog.new("class_name" => "ColourProtoTest", "include_path" => ['spec/helpers/ColourTestcase.pb.rb'])
     end
 
     require 'spec/helpers/ColourTestcase.pb.rb' # otherwise we cant use the colour enums in the next line
