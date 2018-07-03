@@ -1,4 +1,4 @@
-# Logstash protobuf codec
+# Logstash zylog codec
 
 This is a codec plugin for [Logstash](https://github.com/elastic/logstash) to parse protobuf messages.
 

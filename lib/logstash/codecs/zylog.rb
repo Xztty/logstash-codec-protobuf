@@ -80,12 +80,12 @@ class LogStash::Codecs::Zylog < LogStash::Codecs::Base
       @logger.warn("receive data length: #{data.length}.")
       if data.length >= 5
         payload = data.bytes.to_a
-        @logger.warn("receive data byte 1th: #{payload.slice!(0)}.")
-        @logger.warn("receive data byte 2th: #{payload.slice!(1)}.")
-        @logger.warn("receive data byte 3th: #{payload.slice!(2)}.")
-        @logger.warn("receive data byte 4th: #{payload.slice!(3)}.")
-        @logger.warn("receive data byte 5th: #{payload.slice!(4)}.")
-        total_packet_length = payload.slice!(1) + payload.slice!(2) << 8 + payload.slice!(3) << 16 + payload.slice!(4) << 24
+        @logger.warn("receive data byte 1th: #{payload[0]}.")
+        @logger.warn("receive data byte 2th: #{payload[1]}.")
+        @logger.warn("receive data byte 3th: #{payload[2]}.")
+        @logger.warn("receive data byte 4th: #{payload[3]}.")
+        @logger.warn("receive data byte 5th: #{payload[4]}.")
+        total_packet_length = payload[4].ord + payload[3].ord << 8 + payload[2].ord << 16 + payload[1].ord << 24
         @logger.warn("total packet length: #{total_packet_length}.")
         if data.length >= total_packet_length
           data = data.slice(5, total_packet_length - 2)
