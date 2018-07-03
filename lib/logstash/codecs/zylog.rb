@@ -84,7 +84,7 @@ class LogStash::Codecs::Zylog < LogStash::Codecs::Base
         total_packet_length = (payload[4].ord) + (payload[3].ord << 8) + (payload[2].ord << 16) + (payload[1].ord << 24)
         @logger.debug("total packet length: #{total_packet_length}.")
         if data.length >= total_packet_length
-          data = data.slice(5, total_packet_length - 2)
+          data = data.slice(5, total_packet_length - 5 - 1)
           @logger.debug("after extract receive data length: #{data.length}.")
         else
           raise(StandardError, "packet to small, length: #{data.length}.")
