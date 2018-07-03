@@ -115,19 +115,49 @@ class LogStash::Codecs::Protobuf < LogStash::Codecs::Base
 
 
   def decode(data)
-    if @protobuf_version == 3
-      decoded = @pb_builder.decode(data.to_s)
-      h = pb3_deep_to_hash(decoded)
+    @logger.warn("data class type: #{data.class}.")
+    @logger.warn("receive data length: #{data.length}.")
+    if data.length >= 5
+      payload = data.bytes.to_a
+      @logger.warn("receive data byte 1th: #{payload.slice!(0)}.")
+      @logger.warn("receive data byte 2th: #{payload.slice!(1)}.")
+      @logger.warn("receive data byte 3th: #{payload.slice!(2)}.")
+      @logger.warn("receive data byte 4th: #{payload.slice!(3)}.")
+      @logger.warn("receive data byte 5th: #{payload.slice!(4)}.")
+      total_packet_length = payload.slice!(1) + payload.slice!(2) << 8 + payload.slice!(3) << 16 + payload.slice!(4) << 24
+      @logger.warn("total packet length: #{total_packet_length}.")
+      if data.length >= total_packet_length
+        data = data.slice(5, total_packet_length - 2)
+        @logger.warn("after extract receive data length: #{data.length}.")
+      else
+        raise(StandardError, "packet to small, length: #{data.length}.")
+      end
     else
-      decoded = @pb_builder.parse(data.to_s)
-      h = decoded.to_hash        
+      raise(StandardError, "packet to small, length: #{data.length}.")
     end
+
+    decoded = @pb_builder.parse(data.to_s)
+    h = decoded.to_hash
     yield LogStash::Event.new(h) if block_given?
-  rescue => e
+    rescue => e
     @logger.warn("Couldn't decode protobuf: #{e.inspect}.")
     if stop_on_error
       raise e
     end
+
+  #   if @protobuf_version == 3
+  #     decoded = @pb_builder.decode(data.to_s)
+  #     h = pb3_deep_to_hash(decoded)
+  #   else
+  #     decoded = @pb_builder.parse(data.to_s)
+  #     h = decoded.to_hash
+  #   end
+  #   yield LogStash::Event.new(h) if block_given?
+  # rescue => e
+  #   @logger.warn("Couldn't decode protobuf: #{e.inspect}.")
+  #   if stop_on_error
+  #     raise e
+  #   end
   end # def decode
 
 
